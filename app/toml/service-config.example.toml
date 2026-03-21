@@ -1,0 +1,51 @@
+# Copy to service-config.local.toml and fill in secrets (local file is gitignored).
+
+[host]
+server = "localhost"
+port = 8000
+
+# --- Aiven for MySQL (TLS required in production) ---
+[mysql]
+host = "mysql-PROJECT.a.aivencloud.com"
+port = 12345
+user = "avnadmin"
+password = "REPLACE_ME"
+database = "defaultdb"
+# "required" | "verify_identity" | "disabled" (local dev only)
+ssl_mode = "required"
+# Optional: path to Aiven project CA (download from Aiven console)
+ssl_ca_path = ""
+
+# --- MongoDB Atlas (mongodb+srv enables TLS automatically) ---
+[mongodb]
+uri = "mongodb+srv://USER:PASSWORD@cluster0.xxxxx.mongodb.net/?retryWrites=true&w=majority&appName=vidai"
+database = "vidai"
+collection = "vidai"
+server_selection_timeout_ms = 30000
+# Optional: overrides appName query param if set
+app_name = "vidai"
+# Dev only — never in production
+tls_allow_invalid_certificates = false
+
+# --- Aiven for Redis: use rediss:// URL from console, or host + ssl below ---
+[redis]
+url = ""
+host = "localhost"
+port = 6379
+password = ""
+database = 0
+ssl = false
+# Optional when ssl = true (Aiven CA file path)
+ssl_ca_path = ""
+
+[kafka]
+host = "localhost"
+port = 9092
+
+[temporal]
+address = "localhost:7233"
+namespace = "vidai"
+task_queue = "vidai"
+workflow_id = "vidai"
+workflow_task_queue = "vidai"
+workflow_task_queue_type = "sticky"
