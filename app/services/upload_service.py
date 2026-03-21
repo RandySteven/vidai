@@ -92,6 +92,20 @@ class UploadService:
             updated_at=now,
         )
 
+    def get_upload_image(self, id: str) -> UploadImageResponse:
+        image = self._repo.find_by_id(id)
+        if not image:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Image not found",
+            )
+        return UploadImageResponse(
+            id=image["id"],
+            image_url=image["image_url"],
+            uploaded_by=image["uploaded_by"],
+            created_at=image["created_at"],
+            updated_at=image["updated_at"],
+        )
 
 def get_upload_service() -> UploadService:
     return UploadService()
