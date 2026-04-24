@@ -10,5 +10,7 @@ class GenerateWorkflow:
     @workflow.run
     async def generate(self, request: GenerateRequest) -> Video:
         execution_data = ExecutionData()
+        execution_data.generate_request = request
+
         execution_data.image = await validate_image_url.execute(execution_data)
         pass
