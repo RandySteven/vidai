@@ -2,6 +2,7 @@ from pydantic import BaseModel
 from app.entities.models.video import Video
 from app.entities.models.video_generate import VideoGenerate
 from app.entities.models.image import Image
+from app.entities.payloads.requests.generate_request import GenerateRequest
 
 class ExecutionData(BaseModel):
     generate_request: GenerateRequest | None = None
