@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Any
 
 from pydantic import BaseModel
 
@@ -30,3 +31,6 @@ class VideoGenerate(BaseModel):
     finished_at: datetime | None = None
     updated_at: datetime
     deleted_at: datetime | None = None
+
+    def __init__(self, /, **data: Any) -> None:
+        super().__init__(**data)

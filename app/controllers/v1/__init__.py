@@ -1,3 +1,3 @@
-from app.controllers.v1 import health, imagine
+from app.controllers.v1 import health, imagine, onboarding
 
-__all__ = ["health", "imagine"]
+__all__ = ["health", "imagine", "onboarding"]

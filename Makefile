@@ -1,6 +1,6 @@
 .PHONY: run local test
 
-VENV ?= .venv
+VENV ?= venv
 PY := $(VENV)/bin/python
 UVICORN := $(VENV)/bin/uvicorn
 

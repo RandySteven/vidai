@@ -15,6 +15,8 @@ database = "defaultdb"
 ssl_mode = "required"
 # Optional: path to Aiven project CA (download from Aiven console)
 ssl_ca_path = ""
+# Dev only — never in production. Use Aiven CA instead when possible.
+tls_allow_invalid_certificates = false
 
 # --- MongoDB Atlas (mongodb+srv enables TLS automatically) ---
 [mongodb]

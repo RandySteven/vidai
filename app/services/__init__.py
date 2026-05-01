@@ -4,6 +4,8 @@ from app.services.upload_service import UploadService, get_upload_service
 __all__ = [
     "GenerateService",
     "UploadService",
+    "OnboardingService",
     "get_generate_service",
     "get_upload_service",
+    "get_onboarding_service"
 ]

@@ -9,17 +9,25 @@ class ImageRepository(Repository):
         self.mysql_repository = MySQLRepository()
 
     def save(self, entity: Image):
-        query = "INSERT INTO images (image_url, uploaded_by) VALUES (%s, %s)"
-        self.mysql_repository.execute(query, (entity.image_url, entity.uploaded_by))
+        query = "INSERT INTO images (image_url, uploaded_by) VALUES (:image_url, :uploaded_by)"
+        self.mysql_repository.execute(
+            query,
+            {"image_url": entity.image_url, "uploaded_by": entity.uploaded_by},
+            commit=True,
+        )
 
     def find_by_id(self, id: str):
-        query = "SELECT * FROM images WHERE id = %s"
-        return self.mysql_repository.fetch_one(query, id)
+        query = "SELECT * FROM images WHERE id = :id"
+        return self.mysql_repository.fetch_one(query, {"id": id})
 
     def find_all(self):
         query = "SELECT * FROM images"
         return self.mysql_repository.fetch_all(query)
 
     def delete(self, id: str):
-        query = "DELETE FROM images WHERE id = %s"
-        self.mysql_repository.execute(query, id)
+        query = "DELETE FROM images WHERE id = :id"
+        self.mysql_repository.execute(query, {"id": id}, commit=True)
+
+    def find_by_url(self, imageUrl: str) -> Image:
+        query = "SELECT * FROM images WHERE image_url = :image_url"
+        return self.mysql_repository.fetch_one(query, {"image_url": imageUrl})

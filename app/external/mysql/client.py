@@ -42,20 +42,30 @@ def _mysql_connect_args(cfg: dict) -> dict | None:
     mode = str(cfg.get("ssl_mode") or "required").strip().lower()
     if mode in ("disabled", "off", "false", "0"):
         return None
+    allow_invalid = bool(cfg.get("tls_allow_invalid_certificates", False))
     ca_path = (cfg.get("ssl_ca_path") or "").strip()
     if mode in ("verify_identity", "verify-full", "verify_full"):
         ctx = ssl.create_default_context(purpose=ssl.Purpose.SERVER_AUTH)
         if ca_path:
             ctx.load_verify_locations(ca_path)
+        if allow_invalid:
+            ctx.check_hostname = False
+            ctx.verify_mode = ssl.CERT_NONE
         return {"ssl": ctx}
     if mode in ("required", "require", "true", "1"):
         ctx = ssl.create_default_context()
         if ca_path:
             ctx.load_verify_locations(ca_path)
+        if allow_invalid:
+            ctx.check_hostname = False
+            ctx.verify_mode = ssl.CERT_NONE
         return {"ssl": ctx}
     ctx = ssl.create_default_context()
     if ca_path:
         ctx.load_verify_locations(ca_path)
+    if allow_invalid:
+        ctx.check_hostname = False
+        ctx.verify_mode = ssl.CERT_NONE
     return {"ssl": ctx}
 
 

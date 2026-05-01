@@ -1,3 +1,4 @@
+from typing import Any
 from pydantic import BaseModel
 from datetime import datetime
 from app.enums.generate_status import GenerateStatus
@@ -10,3 +11,6 @@ class Video(BaseModel):
     created_at: datetime
     updated_at: datetime
     deleted_at: datetime | None = None
+
+    def __init__(self, /, **data: Any) -> None:
+        super().__init__(**data)
