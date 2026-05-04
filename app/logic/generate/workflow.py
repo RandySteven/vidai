@@ -3,6 +3,7 @@ from temporalio.common import RetryPolicy
 from app.entities.models.image import Image
 from app.entities.models.video_generate import VideoGenerate
 from app.external import minio
+from app.external.rabbitmq.client import RabbitMQClient
 from app.logic.generate.execution_data import ExecutionData
 from app.repositories.video import VideoRepository
 from app.repositories.image import ImageRepository
@@ -17,17 +18,20 @@ class GenerateWorkflow:
     def __init__(self, 
         video_repository: VideoRepository, 
         image_repository: ImageRepository,
+        rabbitmq_client: RabbitMQClient,
         minio_client: MinioClient
     ):    
         self.image_repository = image_repository
         self.video_repository = video_repository
         self.minio_client = minio_client
+        self.rabbitmq_client = rabbitmq_client
         self.execution_data = ExecutionData(
             video_generate=VideoGenerate(),
             video=Video(),
             image=Image(),
             image_repository=self.image_repository,
             video_repository=self.video_repository,
+            rabbitmq_client=self.rabbitmq_client,
             minio_client=self.minio_client
         )
 

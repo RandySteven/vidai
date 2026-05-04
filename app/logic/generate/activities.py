@@ -2,6 +2,8 @@ import asyncio
 
 from temporalio import activity
 
+from app.entities.models.video import Video
+from app.enums.generate_status import GenerateStatus
 from app.logic.generate.execution_data import ExecutionData
 from app.repositories.image import ImageRepository
 from app.errors.error import Error
@@ -30,6 +32,21 @@ class GenerateActivity:
         self.pipe.enable_model_cpu_offload()
         self.pipe.vae.enable_tiling()
 
+    @activity.defn
+    async def init_video(self, execution_data: ExecutionData) -> ExecutionData:
+        video_repository = VideoRepository()
+        video = Video(
+            reference_id=execution_data.generate_request.idempotency_key,
+            status=GenerateStatus.QUEUED,
+            prompt=execution_data.generate_request.prompt
+        )
+        video = video_repository.save(video)
+        execution_data.video = video
+        return execution_data
+
+    @activity.defn
+    async def publish(self, execution_data: ExecutionData) -> ExecutionData:
+        execution_data.rabbitmq_client.publish('generate_video', execution_data.video)
 
     @activity.defn
     async def validate_image_url(self, execution_data : ExecutionData) -> ExecutionData:

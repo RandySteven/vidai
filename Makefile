@@ -9,3 +9,6 @@ run local: ## Run API locally with auto-reload
 
 test: ## Run unit tests (needs: pip install -r requirements-dev.txt)
 	$(PY) -m pytest
+
+venv:
+	source .venv/bin/activate

@@ -5,6 +5,7 @@ from app.enums.generate_status import GenerateStatus
 
 class Video(BaseModel):
     id: int
+    reference_id: str
     video_url: str
     status: GenerateStatus
     prompt: str

@@ -9,6 +9,7 @@ class VideoSettings(BaseModel):
     height: int
 
 class GenerateRequest(BaseModel):
+    idempotency_key: str
     prompt: str
     imageURL: str
     settings: VideoSettings
