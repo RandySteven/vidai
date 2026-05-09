@@ -4,6 +4,7 @@ from app.entities.models.image import Image
 from app.entities.models.video_generate import VideoGenerate
 from app.external import minio
 from app.external.rabbitmq.client import RabbitMQClient
+from app.external.redis.pubsub import RedisPubSub
 from app.logic.generate.execution_data import ExecutionData
 from app.repositories.video import VideoRepository
 from app.repositories.image import ImageRepository
@@ -29,6 +30,7 @@ class GenerateWorkflow:
             video_generate=VideoGenerate(),
             video=Video(),
             image=Image(),
+            pubsub=RedisPubSub(),
             image_repository=self.image_repository,
             video_repository=self.video_repository,
             rabbitmq_client=self.rabbitmq_client,

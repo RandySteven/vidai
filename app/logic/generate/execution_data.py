@@ -6,6 +6,7 @@ from app.entities.models.image import Image
 from app.entities.payloads.requests.generate_request import GenerateRequest
 from app.external import minio
 from app.external.rabbitmq.client import RabbitMQClient
+from app.external.redis.pubsub import RedisPubSub
 from app.repositories.image import ImageRepository
 from app.repositories.repository import Repository
 from app.repositories.video import VideoRepository
@@ -27,6 +28,7 @@ class ExecutionData(BaseModel):
         video: Video, image: Image, video_generate: VideoGenerate, 
         image_repository: ImageRepository, video_repository: VideoRepository,
         rabbitmq_client: RabbitMQClient,
+        pubsub: RedisPubSub,
         minio_client: MinioClient
     ):
         self.video = video
@@ -34,5 +36,6 @@ class ExecutionData(BaseModel):
         self.video_generate = video_generate
         self.image_repository = image_repository
         self.video_repository = video_repository
+        self.pubsub = pubsub
         self.rabbitmq_client = rabbitmq_client
         self.minio_client = minio_client

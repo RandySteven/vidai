@@ -1,6 +1,6 @@
 import os
 
-import pika
+import pika  # pyright: ignore[reportMissingModuleSource]
 
 class RabbitMQClient:
 

@@ -20,3 +20,7 @@ class Repository:
     @abstractmethod
     def delete(self, id: str):
         pass
+
+    @abstractmethod
+    def update(self, entity: BaseModel):
+        pass

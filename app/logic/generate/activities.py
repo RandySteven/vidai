@@ -15,6 +15,7 @@ import time
 from app.logic.generate.execution_data import ExecutionData
 from app.repositories.video import VideoRepository
 from app.external.minio.client import MinioClient
+from app.utils.util import encode_json_str
 
 dtype = torch.bfloat16
 device = "cuda:0"
@@ -46,7 +47,8 @@ class GenerateActivity:
 
     @activity.defn
     async def publish(self, execution_data: ExecutionData) -> ExecutionData:
-        execution_data.rabbitmq_client.publish('generate_video', execution_data.video)
+        execution_data.pubsub.pub('generate_video', encode_json_str(execution_data.video))
+        return execution_data
 
     @activity.defn
     async def validate_image_url(self, execution_data : ExecutionData) -> ExecutionData:
@@ -95,5 +97,10 @@ class GenerateActivity:
             execution_data.minio_client.upload_file_path(execution_data.video.video_url, "vidai-video", execution_data.video.video_url)
         return execution_data
 
-    async def save_video(self, execution_data: ExecutionData) -> ExecutionData:
+    @activity.defn
+    async def update_video(self, execution_data: ExecutionData) -> ExecutionData:
+        video = execution_data.video
+        if video is not None:
+            video.status = GenerateStatus.COMPLETED
+        execution_data.video_repository.update(execution_data.video)
         return execution_data

@@ -22,6 +22,7 @@ class GenerateService:
         self.workflow = GenerateWorkflow(
             video_repository,
             image_repository,
+            rabbitmq_client,
             minio_client
         )
         self.video_repository = video_repository

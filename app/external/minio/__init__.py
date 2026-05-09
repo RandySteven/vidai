@@ -1,4 +1,4 @@
-from app.external.minio import MinioClient
+from app.external.minio.client import MinioClient
 
 __all__ = [
     "MinioClient"
