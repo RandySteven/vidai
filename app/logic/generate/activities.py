@@ -14,7 +14,7 @@ import torch
 import time
 from app.logic.generate.execution_data import ExecutionData
 from app.repositories.video import VideoRepository
-from app.external.minio.client import MinioClient
+from app.external.minios.client import MinioClient
 from app.utils.util import encode_json_str
 from app.repositories.repository import Repository
 from app.external.redis.pubsub import RedisPubSub

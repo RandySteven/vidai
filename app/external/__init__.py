@@ -8,7 +8,7 @@ from app.external.mysql import (
 )
 from app.external.redis import RedisCache, get_redis_client, reset_redis_client, RedisPubSub
 from app.external.temporal import get_temporal_client, reset_temporal_client
-from app.external.minio import MinioClient, get_minio_client
+from app.external.minios import MinioClient, get_minio_client
 
 __all__ = [
     "MongoDBClient",

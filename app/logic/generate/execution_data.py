@@ -4,7 +4,7 @@ from app.entities.models.video import Video
 from app.entities.models.video_generate import VideoGenerate
 from app.entities.models.image import Image
 from app.entities.payloads.requests.generate_request import GenerateRequest
-from app.external import minio
+from app.external import minios
 from app.external.rabbitmq.client import RabbitMQClient
 
 class ExecutionData(BaseModel):

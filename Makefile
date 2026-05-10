@@ -1,6 +1,6 @@
 .PHONY: run local test
 
-VENV ?= venv
+VENV ?= .venv
 PY := $(VENV)/bin/python
 UVICORN := $(VENV)/bin/uvicorn
 
@@ -10,5 +10,5 @@ run local: ## Run API locally with auto-reload
 test: ## Run unit tests (needs: pip install -r requirements-dev.txt)
 	$(PY) -m pytest
 
-venv:
+start venv:
 	source .venv/bin/activate

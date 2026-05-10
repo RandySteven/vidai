@@ -4,7 +4,7 @@ from datetime import datetime, timezone
 from app.entities.payloads.requests.generate_request import GenerateRequest
 from app.entities.payloads.responses.generate_response import GenerateResponse
 from app.enums.generate_status import GenerateStatus
-from app.external.minio.client import MinioClient
+from app.external.minios.client import MinioClient
 from app.external.rabbitmq.client import RabbitMQClient
 from app.logic.generate.workflow import GenerateWorkflow
 from app.repositories.image import ImageRepository

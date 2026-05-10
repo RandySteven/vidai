@@ -2,7 +2,7 @@ from datetime import timedelta
 from temporalio.common import RetryPolicy
 from app.entities.models.image import Image
 from app.entities.models.video_generate import VideoGenerate
-from app.external import minio
+from app.external import minios
 from app.external.rabbitmq.client import RabbitMQClient
 from app.external.redis.pubsub import RedisPubSub
 from app.logic.generate.execution_data import ExecutionData
@@ -12,7 +12,7 @@ from app.entities.models.video import Video
 from temporalio import workflow
 from app.entities.payloads.requests.generate_request import GenerateRequest
 from app.logic.generate.activities import GenerateActivity
-from app.external.minio.client import MinioClient
+from app.external.minios.client import MinioClient
 
 @workflow.defn
 class GenerateWorkflow:

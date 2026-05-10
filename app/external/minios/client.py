@@ -1,8 +1,7 @@
 from typing import Awaitable
 from app.external.config_loader import load_service_config
-from minio import Minio  # pyright: ignore[reportAttributeAccessIssue]
+from minio import Minio
 import io
-
 
 class MinioClient:
     def __init__(self, endpoint: str, access_key: str, secret_key: str) -> None:
@@ -30,7 +29,7 @@ class MinioClient:
         data = io.BytesIO(file)
 
         self.client.put_object(
-            bucket=bucket,
+            bucket_name=bucket,
             object_name=key,
             data=data,
             length=len(file)
