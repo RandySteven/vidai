@@ -1,5 +1,8 @@
+from typing import Awaitable
+from app.external.config_loader import load_service_config
 from minio import Minio  # pyright: ignore[reportAttributeAccessIssue]
 import io
+
 
 class MinioClient:
     def __init__(self, endpoint: str, access_key: str, secret_key: str) -> None:
@@ -9,6 +12,19 @@ class MinioClient:
             secret_key=secret_key,
             secure=False,
         )
+
+    @classmethod
+    async def connect(self, 
+        endpoint: str, access_key: str, secret_key: str
+    ):
+        minio_client = Minio(
+            endpoint=endpoint,
+            access_key=access_key,
+            secret_key=secret_key,
+            secure=False,
+        )
+        self.client = minio_client
+        return self
 
     def upload_file(self, file: bytes, bucket: str, key: str) -> None:
         data = io.BytesIO(file)
@@ -44,3 +60,12 @@ class MinioClient:
     def list_files(self, bucket: str) -> list[str]:
         objects = self.client.list_objects(bucket)
         return [obj.object_name for obj in objects]
+
+async def get_minio_client() -> MinioClient:
+    cfg = load_service_config()["minio"]
+    _minio_client = await MinioClient.connect(
+        cfg["endpoint"],
+        cfg["access_key"],
+        cfg["secret_key"]
+    )
+    return _minio_client

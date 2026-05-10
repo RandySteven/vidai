@@ -15,3 +15,6 @@ class VideoGenerateRepository:
 
     def find_by_id(self, doc_id: str) -> dict[str, Any] | None:
         return self._db.find_by_id(doc_id)
+
+def get_video_generate_repository():
+    return VideoGenerateRepository()

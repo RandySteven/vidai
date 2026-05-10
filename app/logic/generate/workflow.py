@@ -30,11 +30,6 @@ class GenerateWorkflow:
             video_generate=VideoGenerate(),
             video=Video(),
             image=Image(),
-            pubsub=RedisPubSub(),
-            image_repository=self.image_repository,
-            video_repository=self.video_repository,
-            rabbitmq_client=self.rabbitmq_client,
-            minio_client=self.minio_client
         )
 
     @workflow.run
@@ -60,3 +55,6 @@ class GenerateWorkflow:
             start_to_close_timeout=timedelta(seconds=5),
             retry_policy=retry_policy,
         )
+
+    async def subscribe_video_pubsub(self):
+        pass

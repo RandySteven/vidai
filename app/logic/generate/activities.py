@@ -16,6 +16,8 @@ from app.logic.generate.execution_data import ExecutionData
 from app.repositories.video import VideoRepository
 from app.external.minio.client import MinioClient
 from app.utils.util import encode_json_str
+from app.repositories.repository import Repository
+from app.external.redis.pubsub import RedisPubSub
 
 dtype = torch.bfloat16
 device = "cuda:0"
@@ -26,12 +28,21 @@ from diffusers.pipelines.hunyuan_video1_5.pipeline_hunyuan_video1_5_image2video 
 from diffusers.utils.loading_utils import load_image
 
 class GenerateActivity:
-    def __init__(self) -> None:
+    def __init__(self, 
+        image_repository: ImageRepository, video_repository: VideoRepository,
+        pubsub: RedisPubSub,
+        minio_client: MinioClient
+    ) -> None:
         self.export_utils = cast(Any, importlib.import_module("diffusers.utils.export_utils"))
         self.pipe = HunyuanVideo15ImageToVideoPipeline.from_pretrained("hunyuanvideo-community/HunyuanVideo-1.5-Diffusers-480p_i2v_step_distilled", torch_dtype=dtype)
         
         self.pipe.enable_model_cpu_offload()
         self.pipe.vae.enable_tiling()
+
+        self.image_repository = image_repository
+        self.video_repository = video_repository
+        self.pubsub = pubsub
+        self.minio_client = minio_client
 
     @activity.defn
     async def init_video(self, execution_data: ExecutionData) -> ExecutionData:
@@ -47,7 +58,7 @@ class GenerateActivity:
 
     @activity.defn
     async def publish(self, execution_data: ExecutionData) -> ExecutionData:
-        execution_data.pubsub.pub('generate_video', encode_json_str(execution_data.video))
+        self.pubsub.pub('generate_video', encode_json_str(execution_data.video))
         return execution_data
 
     @activity.defn
@@ -94,7 +105,7 @@ class GenerateActivity:
     @activity.defn
     async def upload_video(self, execution_data: ExecutionData) -> ExecutionData:
         if execution_data.video is not None:
-            execution_data.minio_client.upload_file_path(execution_data.video.video_url, "vidai-video", execution_data.video.video_url)
+            self.minio_client.upload_file_path(execution_data.video.video_url, "vidai-video", execution_data.video.video_url)
         return execution_data
 
     @activity.defn
@@ -102,5 +113,5 @@ class GenerateActivity:
         video = execution_data.video
         if video is not None:
             video.status = GenerateStatus.COMPLETED
-        execution_data.video_repository.update(execution_data.video)
+        self.video_repository.update(execution_data.video)
         return execution_data

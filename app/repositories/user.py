@@ -1,7 +1,8 @@
 from app.external.mysql.repository import MySQLRepository
 from app.entities.models.user import User
+from app.repositories.repository import Repository
 
-class UserRepository:
+class UserRepository(Repository):
     def __init__(self) -> None:
         self.mysql_repository = MySQLRepository()
 
@@ -27,6 +28,18 @@ class UserRepository:
         query = "SELECT * FROM users WHERE id = :id"
         return self.mysql_repository.fetch_one(query, {"id": id})
     
+    def update(self, entity: User):
+        pass
+
+    def delete(self, id: str):
+        pass
+
+    def find_all(self):
+        pass
+
     def find_by_email(self, email: str) -> User:
         query = "SELECT * FROM users WHERE email = :email"
         return self.mysql_repository.fetch_one(query, {"email": email})
+
+def get_user_repository() -> UserRepository:
+    return UserRepository()

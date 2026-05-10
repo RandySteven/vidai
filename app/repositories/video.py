@@ -30,3 +30,6 @@ class VideoRepository(Repository):
     def delete(self, id: str):
         query = "DELETE FROM videos WHERE id = :id"
         self.mysql_repository.execute(query, {"id": id}, commit=True)
+
+def get_video_repository():
+    return VideoRepository()

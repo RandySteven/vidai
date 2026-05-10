@@ -31,3 +31,9 @@ class ImageRepository(Repository):
     def find_by_url(self, imageUrl: str) -> Image:
         query = "SELECT * FROM images WHERE image_url = :image_url"
         return self.mysql_repository.fetch_one(query, {"image_url": imageUrl})
+
+    def update(self, entity: Image):
+        pass
+
+def get_image_repository() -> ImageRepository:
+    return ImageRepository()
