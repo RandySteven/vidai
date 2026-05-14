@@ -3,6 +3,7 @@ from datetime import datetime
 from app.enums.generate_status import GenerateStatus
 
 class GenerateResponse(BaseModel):
+    reference_id: str
     video_url: str
     status: GenerateStatus
     reference_id: str

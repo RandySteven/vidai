@@ -7,22 +7,29 @@ from app.enums.generate_status import GenerateStatus
 
 
 class VideoGenerateSettings(BaseModel):
+    id: int
+    request_id: str
     num_frames: int
     fps: int
 
 
 class VideoGenerateInput(BaseModel):
+    id: int
+    request_id: str
     image_url: str
     prompt: str
     settings: VideoGenerateSettings
 
 
 class VideoGenerateOutput(BaseModel):
+    id: int
+    request_id: str
     video_url: str
 
 
 class VideoGenerate(BaseModel):
-    id: str
+    id: int
+    request_id: str
     job_id: str
     input: VideoGenerateInput
     output: VideoGenerateOutput

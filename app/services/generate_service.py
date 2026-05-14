@@ -1,9 +1,9 @@
 import asyncio
 from datetime import datetime, timezone
-
 from app.entities.payloads.requests.generate_request import GenerateRequest
 from app.entities.payloads.responses.generate_response import GenerateResponse
 from app.enums.generate_status import GenerateStatus
+from app.external import get_minio_client
 from app.external.minios.client import MinioClient
 from app.external.rabbitmq.client import RabbitMQClient
 from app.logic.generate.workflow import GenerateWorkflow
@@ -13,22 +13,13 @@ from app.repositories.video import VideoRepository
 
 class GenerateService:
 
-    def __init__(self,
-        video_repository: VideoRepository,
-        image_repository: ImageRepository,
-        rabbitmq_client: RabbitMQClient,
-        minio_client: MinioClient
-    ) -> None:
-        self.workflow = GenerateWorkflow(
-            video_repository,
-            image_repository,
-            rabbitmq_client,
-            minio_client
-        )
-        self.video_repository = video_repository
-        self.image_repository = image_repository
-        self.rabbitmq_client = rabbitmq_client
-        self.minio_client = minio_client
+    def __init__(self) -> None:
+        self.video_repository = VideoRepository()
+        self.image_repository = ImageRepository()
+        self.rabbitmq_client = RabbitMQClient()
+        self.minio_client = get_minio_client()
+
+        self.workflow = GenerateWorkflow()
 
     def start_generation(self, request: GenerateRequest) -> GenerateResponse:
         now = datetime.now(timezone.utc)
@@ -54,17 +45,5 @@ class GenerateService:
         )
         return generate_response
 
-
-
-def get_generate_service(
-    video_repository: VideoRepository,
-    image_repository: ImageRepository,
-    rabbitmq_client: RabbitMQClient,
-    minio_client: MinioClient
-) -> GenerateService:
-    return GenerateService(
-        video_repository,
-        image_repository,
-        rabbitmq_client,
-        minio_client
-    )
+def get_generate_service() -> GenerateService:
+    return GenerateService()

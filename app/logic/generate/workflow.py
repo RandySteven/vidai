@@ -16,16 +16,7 @@ from app.external.minios.client import MinioClient
 
 @workflow.defn
 class GenerateWorkflow:
-    def __init__(self, 
-        video_repository: VideoRepository, 
-        image_repository: ImageRepository,
-        rabbitmq_client: RabbitMQClient,
-        minio_client: MinioClient
-    ):    
-        self.image_repository = image_repository
-        self.video_repository = video_repository
-        self.minio_client = minio_client
-        self.rabbitmq_client = rabbitmq_client
+    def __init__(self):    
         self.execution_data = ExecutionData(
             video_generate=VideoGenerate(),
             video=Video(),

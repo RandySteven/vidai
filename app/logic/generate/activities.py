@@ -1,12 +1,10 @@
 import asyncio
-
 from temporalio import activity
 
 from app.entities.models.video import Video
+from app.entities.payloads.responses.generate_response import GenerateResponse
 from app.enums.generate_status import GenerateStatus
-from app.logic.generate.execution_data import ExecutionData
 from app.repositories.image import ImageRepository
-from app.errors.error import Error
 from temporalio import activity
 from typing import Any, cast
 import importlib
@@ -16,7 +14,6 @@ from app.logic.generate.execution_data import ExecutionData
 from app.repositories.video import VideoRepository
 from app.external.minios.client import MinioClient
 from app.utils.util import encode_json_str
-from app.repositories.repository import Repository
 from app.external.redis.pubsub import RedisPubSub
 
 dtype = torch.bfloat16
@@ -54,6 +51,13 @@ class GenerateActivity:
         )
         video = video_repository.save(video)
         execution_data.video = video
+        execution_data.generate_response = GenerateResponse(
+            reference_id=execution_data.generate_request.idempotency_key,
+            video_url='',
+            status=GenerateStatus.QUEUED,
+            created_at=video.created_at,
+            updated_at=video.updated_at,
+        )
         return execution_data
 
     @activity.defn

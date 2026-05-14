@@ -8,8 +8,7 @@ from app.services.upload_service import UploadService, get_upload_service
 
 router = APIRouter()
 
-
-@router.post("/generate")
+@router.post("/imagine/generate")
 async def generate_video(
     request: GenerateRequest,
     service: GenerateService = Depends(get_generate_service),
@@ -17,7 +16,7 @@ async def generate_video(
     return service.start_generation(request)
 
 
-@router.post("/upload-image")
+@router.post("/imagine/upload-image")
 async def upload_image(
     image: UploadFile = File(..., description="Image bytes (jpeg, png, gif, or webp)"),
     uploaded_by: str = Form(..., min_length=1),
